@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "../../components/ui/button";
-import { Progress } from "../../components/ui/progress";
 
 const GRID_SIZE = 24;
 const BOARD_WIDTH = 312;
@@ -31,20 +30,37 @@ export const GameScreen = (): JSX.Element => {
     setGameState("playing");
   };
 
+  const handleDirectionChange = (newDirection: "UP" | "DOWN" | "LEFT" | "RIGHT") => {
+    switch (newDirection) {
+      case "UP":
+        if (direction !== "DOWN") setDirection("UP");
+        break;
+      case "DOWN":
+        if (direction !== "UP") setDirection("DOWN");
+        break;
+      case "LEFT":
+        if (direction !== "RIGHT") setDirection("LEFT");
+        break;
+      case "RIGHT":
+        if (direction !== "LEFT") setDirection("RIGHT");
+        break;
+    }
+  };
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       switch (e.key) {
         case "ArrowUp":
-          if (direction !== "DOWN") setDirection("UP");
+          handleDirectionChange("UP");
           break;
         case "ArrowDown":
-          if (direction !== "UP") setDirection("DOWN");
+          handleDirectionChange("DOWN");
           break;
         case "ArrowLeft":
-          if (direction !== "RIGHT") setDirection("LEFT");
+          handleDirectionChange("LEFT");
           break;
         case "ArrowRight":
-          if (direction !== "LEFT") setDirection("RIGHT");
+          handleDirectionChange("RIGHT");
           break;
       }
     },
@@ -182,46 +198,45 @@ export const GameScreen = (): JSX.Element => {
           </div>
         </section>
 
-        {/* Time display and progress bar */}
-        <div className="absolute top-[610px] left-[30px] w-[300px]">
-          <Progress value={100} className="h-0.5 bg-[#b0ee62]" />
-        </div>
-
-        <div className="absolute top-[617px] left-[135px] inline-flex items-start">
-          <span className="relative w-[62px] mt-[-1.00px] font-body-b-3-regular-eu-bodysmall font-[number:var(--body-b-3-regular-eu-bodysmall-font-weight)] text-[#b0ee62] text-[length:var(--body-b-3-regular-eu-bodysmall-font-size)] tracking-[var(--body-b-3-regular-eu-bodysmall-letter-spacing)] leading-[var(--body-b-3-regular-eu-bodysmall-line-height)] [font-style:var(--body-b-3-regular-eu-bodysmall-font-style)]">
-            TIME LEFT:
-          </span>
-          <span className="relative w-fit mt-[-1.00px] [font-family:'Mulish',Helvetica] font-normal text-white text-xs tracking-[0] leading-4 whitespace-nowrap">
-            300
-          </span>
-          <span className="relative w-fit mt-[-1.00px] font-body-b-3-regular-eu-bodysmall font-[number:var(--body-b-3-regular-eu-bodysmall-font-weight)] text-white text-[length:var(--body-b-3-regular-eu-bodysmall-font-size)] tracking-[var(--body-b-3-regular-eu-bodysmall-letter-spacing)] leading-[var(--body-b-3-regular-eu-bodysmall-line-height)] whitespace-nowrap [font-style:var(--body-b-3-regular-eu-bodysmall-font-style)]">
-            s
-          </span>
-        </div>
 
         {/* Control buttons */}
-        <div className="absolute bottom-[45px] left-7 flex gap-[18px]">
-          <Button
-            className="w-[143px] h-[85px] bg-[#242424] rounded-2xl border border-solid border-[#303030] shadow-[inset_0px_-12px_0px_#0000008c] hover:bg-[#2a2a2a] h-auto"
-            variant="ghost"
-          >
-            <img
-              className="w-[23px] h-[26px]"
-              alt="Left arrow"
-              src="/polygon-1.svg"
-            />
-          </Button>
-
-          <Button
-            className="w-[143px] h-[85px] bg-[#242424] rounded-2xl border border-solid border-[#303030] shadow-[inset_0px_-12px_0px_#0000008c] hover:bg-[#2a2a2a] h-auto"
-            variant="ghost"
-          >
-            <img
-              className="w-[23px] h-[26px]"
-              alt="Right arrow"
-              src="/polygon-1-1.svg"
-            />
-          </Button>
+        <div className="absolute bottom-[20px] left-1/2 -translate-x-1/2 w-[200px] h-[150px] grid grid-cols-3 grid-rows-2 gap-2 md:hidden">
+          <div className="col-start-2 row-start-1 flex justify-center">
+            <Button
+              onClick={() => handleDirectionChange("UP")}
+              className="w-16 h-16 bg-[#242424] rounded-lg border border-solid border-[#303030] shadow-[inset_0px_-6px_0px_#0000008c] hover:bg-[#2a2a2a] flex items-center justify-center"
+              variant="ghost"
+            >
+              <img className="w-6 h-6 transform rotate-90" alt="Up arrow" src="/polygon-1.svg" />
+            </Button>
+          </div>
+          <div className="col-start-1 row-start-2 flex justify-center">
+            <Button
+              onClick={() => handleDirectionChange("LEFT")}
+              className="w-16 h-16 bg-[#242424] rounded-lg border border-solid border-[#303030] shadow-[inset_0px_-6px_0px_#0000008c] hover:bg-[#2a2a2a] flex items-center justify-center"
+              variant="ghost"
+            >
+              <img className="w-6 h-6" alt="Left arrow" src="/polygon-1.svg" />
+            </Button>
+          </div>
+          <div className="col-start-3 row-start-2 flex justify-center">
+            <Button
+              onClick={() => handleDirectionChange("RIGHT")}
+              className="w-16 h-16 bg-[#242424] rounded-lg border border-solid border-[#303030] shadow-[inset_0px_-6px_0px_#0000008c] hover:bg-[#2a2a2a] flex items-center justify-center"
+              variant="ghost"
+            >
+              <img className="w-6 h-6" alt="Right arrow" src="/polygon-1-1.svg" />
+            </Button>
+          </div>
+          <div className="col-start-2 row-start-2 flex justify-center">
+            <Button
+              onClick={() => handleDirectionChange("DOWN")}
+              className="w-16 h-16 bg-[#242424] rounded-lg border border-solid border-[#303030] shadow-[inset_0px_-6px_0px_#0000008c] hover:bg-[#2a2a2a] flex items-center justify-center"
+              variant="ghost"
+            >
+              <img className="w-6 h-6 transform rotate-90" alt="Down arrow" src="/polygon-1-1.svg" />
+            </Button>
+          </div>
         </div>
       </div>
     </main>
